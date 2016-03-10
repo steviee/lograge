@@ -41,7 +41,7 @@ module Lograge
           binds["#{col.name}"] = v
         }
       end
-      { binds: binds }
+      { params: binds }
     end
 
     def initial_data(event, payload)
