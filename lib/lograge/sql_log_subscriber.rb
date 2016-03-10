@@ -37,8 +37,8 @@ module Lograge
     def binds(payload)
       binds = { }
       unless (payload[:binds] || []).empty?
-        binds = payload[:binds].map { |col,v|
-         { "#{col}" =>  v }
+        payload[:binds].map { |col,v|
+          binds["#{col}"] = v
         }
       end
       binds
