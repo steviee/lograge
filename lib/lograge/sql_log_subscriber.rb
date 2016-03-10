@@ -38,10 +38,10 @@ module Lograge
       binds = { }
       unless (payload[:binds] || []).empty?
         payload[:binds].map { |col,v|
-          binds["#{col}"] = v
+          binds["#{col.name}"] = v
         }
       end
-      binds
+      { binds: binds }
     end
 
     def initial_data(event, payload)
