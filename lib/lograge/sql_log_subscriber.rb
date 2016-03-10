@@ -30,8 +30,8 @@ module Lograge
       payload = event.payload
       data = initial_data(event, payload)
       data.merge!(extract_unpermitted_params)
-      data.merge!(custom_options(event))
       data.merge!(binds(payload))
+      data.merge!(custom_options(event))
     end
 
     def binds(payload)
@@ -41,7 +41,7 @@ module Lograge
           binds["#{col.name}"] = v
         }
       end
-      { params: binds }
+      { fields: binds }
     end
 
     def initial_data(event, payload)
