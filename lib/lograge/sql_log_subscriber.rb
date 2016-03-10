@@ -28,7 +28,7 @@ module Lograge
 
     def extract_request(event, payload)
       payload = event.payload
-      data = initial_data(evant, payload)
+      data = initial_data(event, payload)
       data.merge!(extract_unpermitted_params)
       data.merge!(custom_options(event))
     end
