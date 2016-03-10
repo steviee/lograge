@@ -28,14 +28,15 @@ module Lograge
 
     def extract_request(event, payload)
       payload = event.payload
-      data = initial_data(payload)
+      data = initial_data(evant, payload)
       data.merge!(extract_unpermitted_params)
+      data.merge!(custom_options(event))
     end
 
-    def initial_data(payload)
+    def initial_data(event, payload)
       {
         sql: payload[:sql],
-        name: payload[:name]
+        duration: event.duration
       }
     end
 
