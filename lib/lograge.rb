@@ -8,7 +8,8 @@ require 'lograge/formatters/lines'
 require 'lograge/formatters/logstash'
 require 'lograge/formatters/ltsv'
 require 'lograge/formatters/raw'
-require 'lograge/log_subscriber'
+require 'lograge/request_log_subscriber'
+require 'lograge/sql_log_subscriber'
 require 'active_support/core_ext/module/attribute_accessors'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/ordered_options'
@@ -97,6 +98,8 @@ module Lograge
   def remove_existing_log_subscriptions
     ActiveSupport::LogSubscriber.log_subscribers.each do |subscriber|
       case subscriber
+      when ActiveRevord::LogSubscriber
+        unsubscribe(:active_record, subscriber)
       when ActionView::LogSubscriber
         unsubscribe(:action_view, subscriber)
       when ActionController::LogSubscriber
@@ -139,6 +142,10 @@ module Lograge
 
   def attach_to_action_controller
     Lograge::RequestLogSubscriber.attach_to :action_controller
+  end
+
+  def attach_to_action_controller
+    Lograge::SqlLogSubscriber.attach_to :activerecord
   end
 
   def set_lograge_log_options
