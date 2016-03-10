@@ -26,16 +26,42 @@ module Lograge
 
     private
 
+    def render_bind(column, value)
+      if column
+        if column.binary?
+          # This specifically deals with the PG adapter that casts bytea columns into a Hash.
+          value = value[:value] if value.is_a?(Hash)
+          value = value ? "<#{value.bytesize} bytes of binary data>" : "<NULL binary data>"
+        end
+
+        [column.name, value]
+      else
+        [nil, value]
+      end
+    end
+
     def extract_request(event, payload)
       payload = event.payload
       data = initial_data(event, payload)
       data.merge!(extract_unpermitted_params)
       data.merge!(custom_options(event))
+      data.merge!(binds(payload))
+    end
+
+    def binds(payload)
+      binds = nil
+      unless (payload[:binds] || []).empty?
+        binds = "  " + payload[:binds].map { |col,v|
+         render_bind(col, v)
+        }.inspect
+      end
+      binds
     end
 
     def initial_data(event, payload)
       {
         sql: payload[:sql],
+        name: payload[:name],
         duration: event.duration
       }
     end
