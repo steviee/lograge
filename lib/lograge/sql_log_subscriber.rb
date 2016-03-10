@@ -34,9 +34,9 @@ module Lograge
           value = value ? "<#{value.bytesize} bytes of binary data>" : "<NULL binary data>"
         end
 
-        [column.name, value]
+        { "#{column.name}": value }
       else
-        [nil, value]
+        { binds: value }
       end
     end
 
