@@ -1,4 +1,4 @@
-require 'lograge/log_subscriber'
+require 'lograge/request_log_subscriber'
 require 'active_support/notifications'
 require 'active_support/core_ext/string'
 require 'logger'
